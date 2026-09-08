@@ -18,6 +18,8 @@ namespace app {
 
         void draw_fish();
 
+        void draw_skybox();
+
         void begin_draw() override;
 
         void end_draw() override;
