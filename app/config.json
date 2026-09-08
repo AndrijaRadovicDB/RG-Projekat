@@ -1,6 +1,9 @@
 {
   "resources": {
     "models": {
+      "fish": {
+        "path": "fish/Goldfish_01.obj"
+      }
     }
   },
   "window": {
