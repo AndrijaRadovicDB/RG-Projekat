@@ -6,9 +6,12 @@
 
 #include <engine/core/Controller.hpp>
 #include <engine/platform/PlatformController.hpp>
+#include <engine/resources/ResourcesController.hpp>
+#include <spdlog/spdlog.h>
 
 namespace app {
     void MainController::initialize() {
+        spdlog::info("MainController initialized");
     }
 
     bool MainController::loop() {
@@ -17,5 +20,14 @@ namespace app {
             return false;
         }
         return true;
+    }
+
+    void MainController::draw_fish() {
+        auto resources                  = engine::core::Controller::get<engine::resources::ResourcesController>();
+        engine::resources::Model *model = resources->model("fish");
+    }
+
+    void MainController::draw() {
+        draw_fish();
     }
 } // app
