@@ -14,6 +14,10 @@ namespace app {
 
         void draw_fish();
 
+        void begin_draw() override;
+
+        void end_draw() override;
+
         void draw() override;
 
     public:
