@@ -86,11 +86,11 @@ namespace app {
         shader->set_mat4("model", model);
         shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
-        shader->set_vec3("dirLight_direction", glm::vec3(-0.2f, -1.0f, 0.01f));
-        shader->set_vec3("dirLight_color", glm::vec3(0.3f, 0.3f, 0.3f));
+        shader->set_vec3("dirLight_direction", dirLight_direction);
+        shader->set_vec3("dirLight_color", dirLight_color);
 
-        shader->set_vec3("pointLight_position", glm::vec3(1.5f, 1.0f, 1.0f));
-        shader->set_vec3("pointLight_color", glm::vec3(1.0f, 1.0f, 1.0f));
+        shader->set_vec3("pointLight_position", pointLight_position);
+        shader->set_vec3("pointLight_color", pointLight_color);
         shader->set_float("pointLight_const", 1.0f);
         shader->set_float("pointLight_linear", 0.09f);
         shader->set_float("pointLight_quadratic", 0.032f);
