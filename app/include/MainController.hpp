@@ -17,7 +17,7 @@ namespace app {
 
         void update() override;
 
-        void draw_fish();
+        void draw_tree();
 
         void draw_skybox();
 
@@ -33,10 +33,10 @@ namespace app {
         }
 
         glm::vec3 dirLight_direction = glm::vec3(-0.2f, -1.0f, 0.01f);
-        glm::vec3 dirLight_color = glm::vec3(0.3f, 0.3f, 0.3f);
+        glm::vec3 dirLight_color     = glm::vec3(0.3f, 0.3f, 0.3f);
 
         glm::vec3 pointLight_position = glm::vec3(1.5f, 1.0f, 1.0f);
-        glm::vec3 pointLight_color = glm::vec3(0.3f, 0.3f, 0.3f);
+        glm::vec3 pointLight_color    = glm::vec3(0.3f, 0.3f, 0.3f);
     };
 } // app
 

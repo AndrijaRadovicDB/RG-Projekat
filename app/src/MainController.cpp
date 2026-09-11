@@ -69,21 +69,16 @@ namespace app {
         update_camera();
     }
 
-    void MainController::draw_fish() {
+    void MainController::draw_tree() {
         auto resources                    = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto graphics                     = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        engine::resources::Model *fish    = resources->model("fish");
+        engine::resources::Model *tree    = resources->model("tree");
         engine::resources::Shader *shader = resources->shader("basic");
 
         shader->use();
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         shader->set_vec3("viewPos", graphics->camera()->Position);
-
-        glm::mat4 model = glm::mat4(1.0f);
-        model           = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
-        model           = glm::scale(model, glm::vec3(0.1f));
-        shader->set_mat4("model", model);
         shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
         shader->set_vec3("dirLight_direction", dirLight_direction);
@@ -95,7 +90,28 @@ namespace app {
         shader->set_float("pointLight_linear", 0.09f);
         shader->set_float("pointLight_quadratic", 0.032f);
 
-        fish->draw(shader);
+        std::vector<glm::vec3> treePositions;
+        float radius   = 2.0f;
+        int numOfTrees = 6;
+
+        for (int i = 0; i < numOfTrees; i++) {
+            float angle = 2.0f * glm::pi<float>() * i / numOfTrees;
+            float x     = radius * cos(angle);
+            float z     = radius * sin(angle);
+
+            treePositions.push_back(glm::vec3(x, 0.0f, z));
+        }
+
+        for (const auto &position: treePositions) {
+            glm::mat4 model = glm::mat4(1.0f);
+
+            model = glm::translate(model, position);
+            model = glm::scale(model, glm::vec3(0.1f));
+
+            shader->set_mat4("model", model);
+
+            tree->draw(shader);
+        }
     }
 
     void MainController::draw_skybox() {
@@ -116,7 +132,7 @@ namespace app {
     }
 
     void MainController::draw() {
-        draw_fish();
+        draw_tree();
         draw_skybox();
     }
 } // app

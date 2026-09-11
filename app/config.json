@@ -1,8 +1,8 @@
 {
   "resources": {
     "models": {
-      "fish": {
-        "path": "fish/Goldfish_01.obj"
+      "tree": {
+        "path": "tree/BASE.obj"
       }
     }
   },
