@@ -114,6 +114,38 @@ namespace app {
         }
     }
 
+    void MainController::draw_cauldron() {
+        auto resources                     = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics                      = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        engine::resources::Model *cauldron = resources->model("cauldron");
+        engine::resources::Shader *shader  = resources->shader("basic");
+
+        shader->use();
+
+        shader->set_mat4("projection", graphics->projection_matrix());
+        shader->set_mat4("view", graphics->camera()->view_matrix());
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+        shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
+        shader->set_vec3("dirLight_direction", dirLight_direction);
+        shader->set_vec3("dirLight_color", dirLight_color);
+
+        shader->set_vec3("pointLight_position", pointLight_position);
+        shader->set_vec3("pointLight_color", pointLight_color);
+        shader->set_float("pointLight_const", 1.0f);
+        shader->set_float("pointLight_linear", 0.09f);
+        shader->set_float("pointLight_quadratic", 0.032f);
+
+        glm::mat4 model = glm::mat4(1.0f);
+
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.25));
+
+        shader->set_mat4("model", model);
+
+        cauldron->draw(shader);
+    }
+
     void MainController::draw_skybox() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto skybox    = resources->skybox("mountain_skybox");
@@ -133,6 +165,7 @@ namespace app {
 
     void MainController::draw() {
         draw_tree();
+        draw_cauldron();
         draw_skybox();
     }
 } // app

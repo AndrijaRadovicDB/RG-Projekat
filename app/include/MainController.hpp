@@ -19,6 +19,8 @@ namespace app {
 
         void draw_tree();
 
+        void draw_cauldron();
+
         void draw_skybox();
 
         void begin_draw() override;

@@ -3,6 +3,9 @@
     "models": {
       "tree": {
         "path": "tree/BASE.obj"
+      },
+      "cauldron": {
+        "path": "cauldron/Cauldrin_tri.obj"
       }
     }
   },
