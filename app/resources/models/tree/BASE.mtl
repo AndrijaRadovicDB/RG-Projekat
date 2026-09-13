@@ -1,0 +1,19 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl BASE1
+
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+map_Kd textures/BASE1_Base_Color.png
+map_Bump textures/BASE1_Normal_OpenGL.png
+map_Pr textures/BASE1_Roughness.png
+map_Pm textures/BASE1_Metallic.png
+disp textures/BASE1_Height.png
