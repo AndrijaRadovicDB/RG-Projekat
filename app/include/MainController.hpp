@@ -4,6 +4,8 @@
 
 #ifndef MATF_RG_PROJECT_MYCONTROLLER_HPP
 #define MATF_RG_PROJECT_MYCONTROLLER_HPP
+#include <functional>
+#include <queue>
 #include <engine/core/Controller.hpp>
 #include <glm/vec3.hpp>
 
@@ -15,6 +17,8 @@ namespace app {
 
         void update_camera();
 
+        void update_events();
+
         void update() override;
 
         void draw_tree();
@@ -25,6 +29,8 @@ namespace app {
 
         void draw_terrain();
 
+        void draw_wizard();
+
         void draw_skybox();
 
         void begin_draw() override;
@@ -32,6 +38,11 @@ namespace app {
         void end_draw() override;
 
         void draw() override;
+
+        struct Event {
+            float delay;
+            std::function<void()> action;
+        };
 
     public:
         std::string_view name() const override {
@@ -43,6 +54,15 @@ namespace app {
 
         glm::vec3 pointLight_position = glm::vec3(1.5f, 1.0f, 1.0f);
         glm::vec3 pointLight_color    = glm::vec3(0.3f, 0.3f, 0.3f);
+
+        std::queue<Event> events;
+
+        bool eventChainActive = false;
+        float eventTimer      = 0.0f;
+
+        bool wizardVisible = true;
+        bool sceneRed      = false;
+        bool showEventText = false;
     };
 } // app
 

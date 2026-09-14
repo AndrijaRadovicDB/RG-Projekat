@@ -20,7 +20,7 @@ namespace app {
 
     void MainPlatformEventObserver::on_mouse_move(engine::platform::MousePosition position) {
         auto gui_controller = engine::core::Controller::get<GUIController>();
-        if (!gui_controller->is_enabled()) {
+        if (!gui_controller->showLighting()) {
             auto camera = engine::core::Controller::get<engine::graphics::GraphicsController>()->camera();
             camera->rotate_camera(position.dx, position.dy);
         }
@@ -42,7 +42,7 @@ namespace app {
 
     void MainController::update_camera() {
         auto gui_controller = engine::core::Controller::get<GUIController>();
-        if (gui_controller->is_enabled()) {
+        if (gui_controller->showLighting()) {
             return;
         }
 
@@ -65,8 +65,54 @@ namespace app {
         }
     }
 
+    void MainController::update_events() {
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+
+        if (!eventChainActive && platform->key(engine::platform::KeyId::KEY_SPACE).state() ==
+            engine::platform::Key::State::JustPressed) {
+            eventChainActive = true;
+            eventTimer       = 0.0f;
+
+            wizardVisible = true;
+            sceneRed      = false;
+            showEventText = false;
+
+            events.push({
+                1.0f, [this]() {
+                    wizardVisible = false;
+                    showEventText = true;
+                }
+            });
+
+            events.push({
+                2.0f, [this]() {
+                    sceneRed = true;
+                }
+            });
+        }
+
+        if (!eventChainActive) {
+            return;
+        }
+
+        if (events.empty()) {
+            eventChainActive = false;
+            return;
+        }
+
+        eventTimer          += platform->dt();
+        Event &currentEvent = events.front();
+
+        if (eventTimer >= currentEvent.delay) {
+            currentEvent.action();
+            events.pop();
+            eventTimer = 0.0f;
+        }
+    }
+
     void MainController::update() {
         update_camera();
+        update_events();
     }
 
     void MainController::draw_tree() {
@@ -79,7 +125,11 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         shader->set_vec3("viewPos", graphics->camera()->Position);
-        shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        if (sceneRed) {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
+        } else {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        }
 
         shader->set_vec3("dirLight_direction", dirLight_direction);
         shader->set_vec3("dirLight_color", dirLight_color);
@@ -99,14 +149,14 @@ namespace app {
             float x     = radius * cos(angle);
             float z     = radius * sin(angle);
 
-            treePositions.push_back(glm::vec3(x, 0.0f, z));
+            treePositions.push_back(glm::vec3(x, -1.1f, z));
         }
 
         for (const auto &position: treePositions) {
             glm::mat4 model = glm::mat4(1.0f);
 
             model = glm::translate(model, position);
-            model = glm::scale(model, glm::vec3(0.1f));
+            model = glm::scale(model, glm::vec3(0.25f));
 
             shader->set_mat4("model", model);
 
@@ -124,7 +174,11 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         shader->set_vec3("viewPos", graphics->camera()->Position);
-        shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        if (sceneRed) {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
+        } else {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        }
 
         shader->set_vec3("dirLight_direction", dirLight_direction);
         shader->set_vec3("dirLight_color", dirLight_color);
@@ -137,26 +191,66 @@ namespace app {
 
         std::vector<glm::vec3> treePositions;
         float radius   = 4.0f;
-        int numOfTrees = 5;
+        int numOfTrees = 6;
 
         for (int i = 0; i < numOfTrees; i++) {
             float angle = 2.0f * glm::pi<float>() * i / numOfTrees + glm::radians(30.0f);
             float x     = radius * cos(angle);
             float z     = radius * sin(angle);
 
-            treePositions.push_back(glm::vec3(x, 0.0f, z));
+            treePositions.push_back(glm::vec3(x, -1.0f, z));
         }
 
         for (const auto &position: treePositions) {
             glm::mat4 model = glm::mat4(1.0f);
 
             model = glm::translate(model, position);
-            model = glm::scale(model, glm::vec3(0.001f));
+            model = glm::scale(model, glm::vec3(0.0025f));
 
             shader->set_mat4("model", model);
 
             tree2->draw(shader);
         }
+    }
+
+    void MainController::draw_wizard() {
+        if (!wizardVisible) {
+            return;
+        }
+
+        auto resources                    = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics                     = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        engine::resources::Model *wizard  = resources->model("wizard");
+        engine::resources::Shader *shader = resources->shader("basic");
+
+        shader->use();
+
+        shader->set_mat4("projection", graphics->projection_matrix());
+        shader->set_mat4("view", graphics->camera()->view_matrix());
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+        if (sceneRed) {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
+        } else {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        }
+
+        shader->set_vec3("dirLight_direction", dirLight_direction);
+        shader->set_vec3("dirLight_color", dirLight_color);
+
+        shader->set_vec3("pointLight_position", pointLight_position);
+        shader->set_vec3("pointLight_color", pointLight_color);
+        shader->set_float("pointLight_const", 1.0f);
+        shader->set_float("pointLight_linear", 0.09f);
+        shader->set_float("pointLight_quadratic", 0.032f);
+
+        glm::mat4 model = glm::mat4(1.0f);
+
+        model = glm::translate(model, glm::vec3(0.25f, -0.45f, -0.55f));
+        model = glm::scale(model, glm::vec3(0.0075));
+
+        shader->set_mat4("model", model);
+
+        wizard->draw(shader);
     }
 
     void MainController::draw_cauldron() {
@@ -170,7 +264,11 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         shader->set_vec3("viewPos", graphics->camera()->Position);
-        shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        if (sceneRed) {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
+        } else {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        }
 
         shader->set_vec3("dirLight_direction", dirLight_direction);
         shader->set_vec3("dirLight_color", dirLight_color);
@@ -183,8 +281,8 @@ namespace app {
 
         glm::mat4 model = glm::mat4(1.0f);
 
-        model = glm::translate(model, glm::vec3(0.0f, 0.25f, 0.0f));
-        model = glm::scale(model, glm::vec3(0.25));
+        model = glm::translate(model, glm::vec3(0.0f, -0.75f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.3));
 
         shader->set_mat4("model", model);
 
@@ -202,7 +300,11 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         shader->set_vec3("viewPos", graphics->camera()->Position);
-        shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        if (sceneRed) {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
+        } else {
+            shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        }
 
         shader->set_vec3("dirLight_direction", dirLight_direction);
         shader->set_vec3("dirLight_color", dirLight_color);
@@ -215,7 +317,7 @@ namespace app {
 
         glm::mat4 model = glm::mat4(1.0f);
 
-        model = glm::translate(model, glm::vec3(0.0f, -1.8f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, -2.8f, 0.0f));
         model = glm::scale(model, glm::vec3(0.25));
 
         shader->set_mat4("model", model);
@@ -244,6 +346,7 @@ namespace app {
         draw_tree();
         draw_tree2();
         draw_cauldron();
+        draw_wizard();
         draw_terrain();
         draw_skybox();
     }

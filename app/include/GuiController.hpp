@@ -14,11 +14,15 @@ namespace app {
 
         void poll_events() override;
 
+        bool m_showLighting = false;
     public:
         std::string_view name() const override {
             return "app::GUIController";
         }
 
+        bool showLighting() const {
+            return m_showLighting;
+        }
     };
 } // app
 
