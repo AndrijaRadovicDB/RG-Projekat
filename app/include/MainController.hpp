@@ -19,6 +19,8 @@ namespace app {
 
         void draw_tree();
 
+        void draw_tree2();
+
         void draw_cauldron();
 
         void draw_terrain();

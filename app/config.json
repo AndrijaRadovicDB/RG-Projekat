@@ -9,6 +9,9 @@
       },
       "terrain": {
         "path": "terrain/grass.obj"
+      },
+      "tree2": {
+        "path": "tree2/Winter_tree_3.obj"
       }
     }
   },

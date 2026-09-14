@@ -114,6 +114,51 @@ namespace app {
         }
     }
 
+    void MainController::draw_tree2() {
+        auto resources                    = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics                     = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        engine::resources::Model *tree2   = resources->model("tree2");
+        engine::resources::Shader *shader = resources->shader("basic");
+
+        shader->use();
+        shader->set_mat4("projection", graphics->projection_matrix());
+        shader->set_mat4("view", graphics->camera()->view_matrix());
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+        shader->set_vec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
+        shader->set_vec3("dirLight_direction", dirLight_direction);
+        shader->set_vec3("dirLight_color", dirLight_color);
+
+        shader->set_vec3("pointLight_position", pointLight_position);
+        shader->set_vec3("pointLight_color", pointLight_color);
+        shader->set_float("pointLight_const", 1.0f);
+        shader->set_float("pointLight_linear", 0.09f);
+        shader->set_float("pointLight_quadratic", 0.032f);
+
+        std::vector<glm::vec3> treePositions;
+        float radius   = 4.0f;
+        int numOfTrees = 5;
+
+        for (int i = 0; i < numOfTrees; i++) {
+            float angle = 2.0f * glm::pi<float>() * i / numOfTrees + glm::radians(30.0f);
+            float x     = radius * cos(angle);
+            float z     = radius * sin(angle);
+
+            treePositions.push_back(glm::vec3(x, 0.0f, z));
+        }
+
+        for (const auto &position: treePositions) {
+            glm::mat4 model = glm::mat4(1.0f);
+
+            model = glm::translate(model, position);
+            model = glm::scale(model, glm::vec3(0.001f));
+
+            shader->set_mat4("model", model);
+
+            tree2->draw(shader);
+        }
+    }
+
     void MainController::draw_cauldron() {
         auto resources                     = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto graphics                      = engine::core::Controller::get<engine::graphics::GraphicsController>();
@@ -197,6 +242,7 @@ namespace app {
 
     void MainController::draw() {
         draw_tree();
+        draw_tree2();
         draw_cauldron();
         draw_terrain();
         draw_skybox();
