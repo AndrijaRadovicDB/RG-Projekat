@@ -6,6 +6,9 @@
       },
       "cauldron": {
         "path": "cauldron/Cauldrin_tri.obj"
+      },
+      "terrain": {
+        "path": "terrain/grass.obj"
       }
     }
   },

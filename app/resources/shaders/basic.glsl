@@ -86,7 +86,7 @@ void main() {
     result += calc_point_light(normal, viewDir);
 
     result *= objectColor;
+    vec3 texColor = texture(texture_diffuse1, TexCoords).rgb;
 
-    FragColor = vec4(texture(texture_diffuse1, TexCoords).rgb, 1.0);
-    //FragColor = vec4(objectColor, 1.0);
+    FragColor = vec4(result * texColor, 1.0);
 }
