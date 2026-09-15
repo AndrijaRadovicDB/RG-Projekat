@@ -14,9 +14,9 @@
 
 ### Fundamental:
 
-[ ] Model with lighting
-[ ] Two types of lighting with customizable colors and movement through GUI or ACTIONS
-[ ] {ACTION_X} --- AFTER_M_SECONDS---Triggers---> {EVENT_A} ---> AFTER_N_SECONDS---Triggers---> {EVENT_B}
+[/] Model with lighting
+[/] Two types of lighting with customizable colors and movement through GUI or ACTIONS
+[/] {ACTION_X} --- AFTER_M_SECONDS---Triggers---> {EVENT_A} ---> AFTER_N_SECONDS---Triggers---> {EVENT_B}
 
 ### Group A:
 
@@ -36,12 +36,12 @@
 
 ## Models:
 
-[link1]   
-[link2]
+https://www.turbosquid.com/FullPreview/1414365 
+https://www.turbosquid.com/FullPreview/1087374
+https://www.turbosquid.com/FullPreview/1822648
+https://www.turbosquid.com/FullPreview/1836976
+https://www.turbosquid.com/FullPreview/397711
 
 ## Textures
-
-[link1]  
-[link2]
 
 {OTHER-RESOURCES}
