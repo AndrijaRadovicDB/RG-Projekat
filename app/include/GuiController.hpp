@@ -7,19 +7,24 @@
 #include <engine/core/Controller.hpp>
 
 namespace app {
-    class GUIController : public engine::core::Controller {
-        void initialize() override;
+class GUIController : public engine::core::Controller {
+    void initialize() override;
 
-        void draw() override;
+    void draw() override;
 
-        void poll_events() override;
+    void poll_events() override;
 
-    public:
-        std::string_view name() const override {
-            return "app::GUIController";
-        }
+    bool m_show_lighting = false;
 
-    };
-} // app
+public:
+    std::string_view name() const override {
+        return "app::GUIController";
+    }
 
-#endif //MATF_RG_PROJECT_GUICONTROLLER_HPP
+    bool show_lighting() const {
+        return m_show_lighting;
+    }
+};
+}// namespace app
+
+#endif//MATF_RG_PROJECT_GUICONTROLLER_HPP

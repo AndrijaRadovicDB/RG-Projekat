@@ -5,32 +5,65 @@
 #ifndef MATF_RG_PROJECT_MYCONTROLLER_HPP
 #define MATF_RG_PROJECT_MYCONTROLLER_HPP
 #include <engine/core/Controller.hpp>
+#include <functional>
+#include <glm/vec3.hpp>
+#include <queue>
 
 namespace app {
-    class MainController : public engine::core::Controller {
-        void initialize() override;
+class MainController : public engine::core::Controller {
+    void initialize() override;
 
-        bool loop() override;
+    bool loop() override;
 
-        void update_camera();
+    void update_camera();
 
-        void update() override;
+    void update_events();
 
-        void draw_fish();
+    void update() override;
 
-        void draw_skybox();
+    void draw_tree();
 
-        void begin_draw() override;
+    void draw_tree2();
 
-        void end_draw() override;
+    void draw_cauldron();
 
-        void draw() override;
+    void draw_terrain();
 
-    public:
-        std::string_view name() const override {
-            return "app::MainController";
-        }
+    void draw_wizard();
+
+    void draw_skybox();
+
+    void begin_draw() override;
+
+    void end_draw() override;
+
+    void draw() override;
+
+    struct Event {
+        float delay;
+        std::function<void()> action;
     };
-} // app
 
-#endif //MATF_RG_PROJECT_MYCONTROLLER_HPP
+public:
+    std::string_view name() const override {
+        return "app::MainController";
+    }
+
+    glm::vec3 dir_light_direction = glm::vec3(-0.2f, -1.0f, 0.01f);
+    glm::vec3 dir_light_color = glm::vec3(0.3f, 0.3f, 0.3f);
+
+    glm::vec3 point_light_position = glm::vec3(1.5f, 1.0f, 1.0f);
+    glm::vec3 point_light_color = glm::vec3(0.3f, 0.3f, 0.3f);
+
+    std::queue<Event> events;
+
+    bool event_chain_active = false;
+    float event_timer = 0.0f;
+
+    bool wizard_visible = true;
+    bool scene_red = false;
+    bool show_event_text = false;
+};
+}// namespace app
+
+#endif//MATF_RG_PROJECT_MYCONTROLLER_HPP
