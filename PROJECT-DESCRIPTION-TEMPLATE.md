@@ -1,22 +1,23 @@
-# {NAME-OF-THE-PROJECT}
+# Haunted forest
 
-{INDEX} - {STUDENT-FULL-NAME}  
-{PROJECT DESCRIPTION}
+133/2023 - Andrija Radović   
+Wizard in haunted forest summons a blood moon.
 
 ## Controls
 
-{BUTTON1} -> {ACTION1}  
-{BUTTON2} -> {ACTION2}  
-...  
-{BUTTONN} -> {ACTIONN}
+W -> Up  
+A -> Left  
+S -> Down  
+D -> Right  
+Space -> Event starter
 
 ## Features
 
 ### Fundamental:
 
-[/] Model with lighting
-[/] Two types of lighting with customizable colors and movement through GUI or ACTIONS
-[/] {ACTION_X} --- AFTER_M_SECONDS---Triggers---> {EVENT_A} ---> AFTER_N_SECONDS---Triggers---> {EVENT_B}
+[/] Model with lighting  
+[/] Two types of lighting with customizable colors and movement through GUI or ACTIONS  
+[/] {ACTION_X} --- AFTER_M_SECONDS---Triggers---> {EVENT_A} ---> AFTER_N_SECONDS---Triggers---> {EVENT_B}  
 
 ### Group A:
 
@@ -36,12 +37,12 @@
 
 ## Models:
 
-https://www.turbosquid.com/FullPreview/1414365 
-https://www.turbosquid.com/FullPreview/1087374
-https://www.turbosquid.com/FullPreview/1822648
-https://www.turbosquid.com/FullPreview/1836976
-https://www.turbosquid.com/FullPreview/397711
+Tree 1 - https://www.turbosquid.com/FullPreview/1414365  
+Cauldron - https://www.turbosquid.com/FullPreview/1087374  
+Terrain - https://www.turbosquid.com/FullPreview/1822648  
+Tree 2 - https://www.turbosquid.com/FullPreview/1836976  
+Wizard - https://www.turbosquid.com/FullPreview/397711  
 
 ## Textures
 
-{OTHER-RESOURCES}
+Skybox - https://www.humus.name/index.php?page=Cubemap&item=Storforsen3
