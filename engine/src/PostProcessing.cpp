@@ -7,6 +7,7 @@
 #include <engine/resources/PostProcessing.hpp>
 #include <engine/resources/Shader.hpp>
 #include <stdexcept>
+#include <spdlog/spdlog.h>
 
 namespace engine::resources {
     PostProcessing::PostProcessing(int width, int height) : m_width{width}
@@ -28,9 +29,10 @@ namespace engine::resources {
 
         CHECKED_GL_CALL(glBindVertexArray, m_vao);
         CHECKED_GL_CALL(glBindBuffer, GL_ARRAY_BUFFER, m_vbo);
+        CHECKED_GL_CALL(glBufferData, GL_ARRAY_BUFFER, sizeof(quad_vertices), quad_vertices, GL_STATIC_DRAW);
 
         CHECKED_GL_CALL(glVertexAttribPointer, 0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
-        CHECKED_GL_CALL(glEnableVertexAttribArray, m_vao);
+        CHECKED_GL_CALL(glEnableVertexAttribArray, 0);
         CHECKED_GL_CALL(glVertexAttribPointer, 1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
                         reinterpret_cast<void *>(2 * sizeof(float)));
         CHECKED_GL_CALL(glEnableVertexAttribArray, 1);
@@ -43,14 +45,13 @@ namespace engine::resources {
 
     void PostProcessing::create_framebuffer() {
         CHECKED_GL_CALL(glGenFramebuffers, 1, &m_fbo);
+
         CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, m_fbo);
-
         CHECKED_GL_CALL(glGenTextures, 1, &m_color_texture);
-        CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D, m_color_texture);
 
+        CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D, m_color_texture);
         CHECKED_GL_CALL(glTexImage2D, GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE,
                         nullptr);
-
         CHECKED_GL_CALL(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         CHECKED_GL_CALL(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         CHECKED_GL_CALL(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -58,8 +59,7 @@ namespace engine::resources {
 
         CHECKED_GL_CALL(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_color_texture,
                         0);
-
-        CHECKED_GL_CALL(glGenRenderbuffers, GL_RENDERBUFFER, &m_depth_stencil_rbo);
+        CHECKED_GL_CALL(glGenRenderbuffers, 1, &m_depth_stencil_rbo);
         CHECKED_GL_CALL(glBindRenderbuffer, GL_RENDERBUFFER, m_depth_stencil_rbo);
         CHECKED_GL_CALL(glRenderbufferStorage, GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
 
@@ -87,7 +87,7 @@ namespace engine::resources {
         CHECKED_GL_CALL(glDisable, GL_DEPTH_TEST);
 
         shader->use();
-        shader->set_int("screen_texture", 0);
+        shader->set_int("screenTexture", 0);
 
         CHECKED_GL_CALL(glActiveTexture, GL_TEXTURE0);
         CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D, m_color_texture);
@@ -101,12 +101,12 @@ namespace engine::resources {
         CHECKED_GL_CALL(glEnable, GL_DEPTH_TEST);
     }
 
-    void PostProcessing::resize(int widht, int height) {
+    void PostProcessing::resize(int width, int height) {
         if (width <= 0 || height <= 0) {
             return;
         }
 
-        m_width  = widht;
+        m_width  = width;
         m_height = height;
 
         if (m_fbo != 0) {

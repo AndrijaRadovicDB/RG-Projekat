@@ -39,7 +39,7 @@ namespace engine::resources {
 
         void end(Shader *shader);
 
-        void resize(int widht, int height);
+        void resize(int width, int height);
 
         uint32_t framebuffer() const {
             return m_fbo;

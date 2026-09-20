@@ -30,6 +30,9 @@ void MainController::initialize() {
     auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
     platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
     engine::graphics::OpenGL::enable_depth_testing();
+
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+    m_post_processing = std::make_unique<engine::resources::PostProcessing>(1200, 800);
 }
 
 bool MainController::loop() {
@@ -109,6 +112,10 @@ void MainController::update_events() {
 void MainController::update() {
     update_camera();
     update_events();
+}
+    
+void MainController::resize(int width, int height) {
+    m_post_processing->resize(width, height);
 }
 
 void MainController::draw_tree() {
@@ -339,11 +346,17 @@ void MainController::end_draw() {
 }
 
 void MainController::draw() {
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+
+    m_post_processing->begin();
+
     draw_tree();
     draw_tree2();
     draw_cauldron();
     draw_wizard();
     draw_terrain();
     draw_skybox();
+
+    m_post_processing->end(resources->shader("red_tint"));
 }
 }// namespace app

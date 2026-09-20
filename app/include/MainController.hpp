@@ -8,6 +8,8 @@
 #include <functional>
 #include <glm/vec3.hpp>
 #include <queue>
+#include <engine/resources/PostProcessing.hpp>
+#include <engine/resources/ResourcesController.hpp>
 
 namespace app {
 class MainController : public engine::core::Controller {
@@ -20,6 +22,8 @@ class MainController : public engine::core::Controller {
     void update_events();
 
     void update() override;
+
+    void resize(int width, int height);
 
     void draw_tree();
 
@@ -43,6 +47,8 @@ class MainController : public engine::core::Controller {
         float delay;
         std::function<void()> action;
     };
+
+    std::unique_ptr<engine::resources::PostProcessing> m_post_processing;
 
 public:
     std::string_view name() const override {
