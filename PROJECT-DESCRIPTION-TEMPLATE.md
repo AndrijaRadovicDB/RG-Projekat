@@ -21,7 +21,7 @@ Space -> Event starter
 
 ### Group A:
 
-[ ] Frame-buffers with post-processing   
+[/] Frame-buffers with post-processing   
 [ ] Off-screen Anti-Aliasing  
 [ ] Parallax Mapping
 [ ] Bloom with the use of HDR
