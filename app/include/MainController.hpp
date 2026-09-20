@@ -23,8 +23,6 @@ namespace app {
 
         void update() override;
 
-        void resize(int width, int height);
-
         void draw_tree();
 
         void draw_tree2();
@@ -54,6 +52,8 @@ namespace app {
         std::string_view name() const override {
             return "app::MainController";
         }
+
+        void resize(int width, int height);
 
         glm::vec3 dir_light_direction = glm::vec3(-0.2f, -1.0f, 0.01f);
         glm::vec3 dir_light_color     = glm::vec3(0.3f, 0.3f, 0.3f);

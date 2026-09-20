@@ -16,6 +16,8 @@ namespace app {
     class MainPlatformEventObserver : public engine::platform::PlatformEventObserver {
     public:
         void on_mouse_move(engine::platform::MousePosition position) override;
+
+        void on_window_resize(int width, int height) override;
     };
 
     void MainPlatformEventObserver::on_mouse_move(engine::platform::MousePosition position) {
@@ -24,6 +26,11 @@ namespace app {
             auto camera = engine::core::Controller::get<engine::graphics::GraphicsController>()->camera();
             camera->rotate_camera(position.dx, position.dy);
         }
+    }
+
+    void MainPlatformEventObserver::on_window_resize(int width, int height) {
+        auto main_controller = engine::core::Controller::get<MainController>();
+        main_controller->resize(width, height);
     }
 
     void MainController::initialize() {

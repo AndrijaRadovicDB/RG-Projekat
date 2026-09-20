@@ -83,7 +83,7 @@ namespace engine::resources {
 
     void PostProcessing::end(Shader *shader) {
         CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, 0);
-
+        CHECKED_GL_CALL(glViewport, 0, 0, m_width, m_height);
         CHECKED_GL_CALL(glDisable, GL_DEPTH_TEST);
 
         shader->use();
