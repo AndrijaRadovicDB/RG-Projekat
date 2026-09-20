@@ -71,25 +71,38 @@ namespace app {
 
         if (!event_chain_active && platform->key(engine::platform::KeyId::KEY_SPACE).state() ==
             engine::platform::Key::State::JustPressed) {
-            event_chain_active = true;
-            event_timer        = 0.0f;
+            if (!event_chain_active && event_state) {
+                scene_red       = false;
+                wizard_visible  = true;
+                show_event_text = false;
+                event_state     = false;
 
-            wizard_visible  = true;
-            scene_red       = false;
-            show_event_text = false;
+                return;
+            }
 
-            events.push({
-                1.0f, [this]() {
-                    wizard_visible  = false;
-                    show_event_text = true;
-                }
-            });
+            if (!event_chain_active && !event_state) {
+                event_chain_active = true;
+                event_timer        = 0.0f;
 
-            events.push({
-                2.0f, [this]() {
-                    scene_red = true;
-                }
-            });
+                wizard_visible  = true;
+                scene_red       = false;
+                show_event_text = false;
+                event_state     = false;
+
+                events.push({
+                    1.0f, [this]() {
+                        wizard_visible  = false;
+                        show_event_text = true;
+                    }
+                });
+
+                events.push({
+                    2.0f, [this]() {
+                        scene_red   = true;
+                        event_state = true;
+                    }
+                });
+            }
         }
 
         if (!event_chain_active) {
