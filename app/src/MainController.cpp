@@ -48,6 +48,10 @@ namespace app {
         return true;
     }
 
+    void MainController::terminate() {
+        m_post_processing.reset();
+    }
+
     void MainController::update_camera() {
         auto gui_controller = engine::core::Controller::get<GUIController>();
         if (gui_controller->show_lighting()) {

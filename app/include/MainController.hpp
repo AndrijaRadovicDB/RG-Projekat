@@ -17,6 +17,8 @@ namespace app {
 
         bool loop() override;
 
+        void terminate() override;
+
         void update_camera();
 
         void update_events();

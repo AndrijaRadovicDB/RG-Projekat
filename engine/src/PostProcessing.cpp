@@ -6,8 +6,7 @@
 #include <engine/graphics/OpenGL.hpp>
 #include <engine/resources/PostProcessing.hpp>
 #include <engine/resources/Shader.hpp>
-#include <stdexcept>
-#include <spdlog/spdlog.h>
+#include <engine/util/Errors.hpp>
 
 namespace engine::resources {
     PostProcessing::PostProcessing(int width, int height) : m_width{width}
@@ -41,7 +40,7 @@ namespace engine::resources {
 
     PostProcessing::~PostProcessing() {
         destroy();
-    };
+    }
 
     void PostProcessing::create_framebuffer() {
         CHECKED_GL_CALL(glGenFramebuffers, 1, &m_fbo);
@@ -67,7 +66,7 @@ namespace engine::resources {
                         m_depth_stencil_rbo);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            throw std::runtime_error("Framebuffer not complete");
+            RG_ENGINE_ERROR(engine::util::EngineError::Type::OpenGLError, "Framebuffer not complete");
         }
 
         CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, 0);
