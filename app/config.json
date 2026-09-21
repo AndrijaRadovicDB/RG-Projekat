@@ -1,14 +1,26 @@
 {
   "resources": {
     "models": {
-      "fish": {
-        "path": "fish/Goldfish_01.obj"
+      "tree": {
+        "path": "tree/BASE.obj"
+      },
+      "cauldron": {
+        "path": "cauldron/Cauldrin_tri.obj"
+      },
+      "terrain": {
+        "path": "terrain/grass.obj"
+      },
+      "tree2": {
+        "path": "tree2/Winter_tree_3.obj"
+      },
+      "wizard": {
+        "path": "wizard/Lasha.obj"
       }
     }
   },
   "window": {
-    "height": 600,
-    "title": "Hello, window!",
-    "width": 800
+    "height": 800,
+    "title": "Haunted forest",
+    "width": 1200
   }
 }
